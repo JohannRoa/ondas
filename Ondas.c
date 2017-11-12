@@ -4,7 +4,7 @@
    
 int main()
 {
-/*
+
 //extraigo datos iniciales de la cuerda y los pongo en arrays
 static const int MAX_FILE_ROWS = 129;
 double A[MAX_FILE_ROWS],B[MAX_FILE_ROWS];
@@ -36,43 +36,48 @@ fclose(file);
 	double * uviejo=malloc(N*sizeof(double));
 	double * unuevo=malloc(N*sizeof(double));
 	double * upresente=malloc(N*sizeof(double));
+	uviejo=B;
 	
 	int i;
-	uviejo=B;
+	
 	int j;
 	int k;
-	/*for(i=0;i<N;i++){
-		printf(" %f",uviejo[i] );
+
+	FILE *f = fopen("cuerda.dat", "w");
+	
+	for(i=0;i<N;i++){
+		fprintf(f," %f",uviejo[i] );
 		}
-	printf(" \n");
+	fprintf(f," \n");
 	upresente[0]=uviejo[0];
 	upresente[N-1]=uviejo[N-1];
-	printf(" %f",upresente[0] );
+	fprintf(f," %f",upresente[0] );
 	for(i=1;i<N-1;i++){
 		
 		upresente[i]=uviejo[i]+pow(r,2)*0.5*(uviejo[i+1]+uviejo[i-1]-2*uviejo[i]);
-		printf(" %f",upresente[i] );
+		fprintf(f," %f",upresente[i] );
 		}
-	printf(" %f",upresente[N-1] );		
-	printf(" \n");
+	fprintf(f," %f",upresente[N-1] );		
+	fprintf(f," \n");
 
 
 
 	for(j=2;j<M;j++){
 		unuevo[0]=uviejo[0];
 		unuevo[N-1]=uviejo[N-1];
-		printf(" %f",unuevo[0] );
+		fprintf(f," %f",unuevo[0] );
 		for(i=1;i<N-1;i++){
 			unuevo[i] = (2.0*(1.0-pow(r,2)))*upresente[i] - uviejo[i] + (pow(r,2)*(upresente[i+1] +  upresente[i-1]));
-			printf(" %f",unuevo[i] );
+			fprintf(f," %f",unuevo[i] );
 				}
-		printf(" %f",unuevo[N-1] );
-		printf(" \n");
+		fprintf(f," %f",unuevo[N-1] );
+		fprintf(f," \n");
 		for (k=1;k<N-1;k++){	
 			uviejo[k]=upresente[k];
 			upresente[k]=unuevo[k];
 			}
-	printf(" \n");
+	
+	
 	//el arreglo generado tiene entonces 71429 datos en t(filas) y 129 datos en x(columnas)
 
 			
@@ -80,17 +85,18 @@ fclose(file);
 	
 
 	}
+fclose(f);
 
-
+	
 
 	//parte 2: cuerda perturbada
-	
+	FILE *fp = fopen("cuerdaperturbada.dat", "w");
 	double pi=3.141592;
 	for(i=0;i<N;i++){
 		uviejo[i]=0;
-		printf(" %f",uviejo[i] );
+		fprintf(fp," %f",uviejo[i] );
 		}
-	printf(" \n");
+	fprintf(fp," \n");
 	upresente[0]=uviejo[0];
 
 	for(i=1;i<N-1;i++){
@@ -98,9 +104,9 @@ fclose(file);
 			}
 	upresente[N-1]=sin((2*pi*c/0.64)*dt);	
 	for(i=0;i<N;i++){
-		printf(" %f",upresente[i] );
+		fprintf(fp," %f",upresente[i] );
 		}
-	printf(" \n");
+	fprintf(fp," \n");
 	
 	
 	for(j=2;j<M;j++){
@@ -112,18 +118,18 @@ fclose(file);
 		unuevo[N-1]=sin((2*pi*c/0.64)*dt*j);
 		
 		for (k=0;k<N;k++){	
-			printf(" %f",unuevo[k] );
+			fprintf(fp," %f",unuevo[k] );
 			uviejo[k]=upresente[k];
 			upresente[k]=unuevo[k];
 			}
-		printf(" \n");
+		fprintf(fp," \n");
 	//tamanio igual que el anterior, sin embargo este punto comenzaria a partir de la fila 71429.
 			
 		
 	
 
-	}
-*/
+			}
+	fclose(fp);
 	// tambor
 
 
@@ -133,116 +139,117 @@ double** matriz=malloc(101*sizeof(double*));
 		matriz[i]=malloc(101*sizeof(double));
 				}
 
-FILE *file = fopen("cond_ini_tambor.dat", "r");
+FILE *file1 = fopen("cond_ini_tambor.dat", "r");
 for (int i = 0; i < 101; i++)
 {
 	for (int j = 0; j < 101; j++){
-  		if (feof(file))
+  		if (feof(file1))
         		break;
 
-    		fscanf(file, " %lf ", &matriz[i][j]);
+    		fscanf(file1, " %lf ", &matriz[i][j]);
 		//printf(" %lf ", matriz[i][j]);
 			}
 	//printf(" \n");
 }
-fclose(file);
+fclose(file1);
 
-	double dx=0.5/101;
-	double dy=0.5/101;
-	double dt=1.38e-5;
-	int N =101.;
-	int M=0.01/dt+1.;
-	double c=250.;
-	double r= c*dt/dx;
-	double ** uviejo=malloc(N*sizeof(double));
+FILE *tb = fopen("tambor.dat", "w");
+	double dx2=0.5/101;
+	double dy2=0.5/101;
+	double dt2=1.38e-5;
+	int N2 =101.;
+	int M2=0.01/dt2+1.;
+	double c2=250.;
+	double r2= c2*dt2/dx2;
+	double ** uviejo2=malloc(N2*sizeof(double));
 		for(int i=0;i<101;i++){
-			uviejo[i]=malloc(101*sizeof(double));
+			uviejo2[i]=malloc(101*sizeof(double));
 			}
-	double ** unuevo=malloc(N*sizeof(double));
+	double ** unuevo2=malloc(N2*sizeof(double));
 		for(int i=0;i<101;i++){
-			unuevo[i]=malloc(101*sizeof(double));
+			unuevo2[i]=malloc(101*sizeof(double));
 			}
-	double ** upresente=malloc(N*sizeof(double));
+	double ** upresente2=malloc(N2*sizeof(double));
 		for(int i=0;i<101;i++){
-			upresente[i]=malloc(101*sizeof(double));
+			upresente2[i]=malloc(101*sizeof(double));
 			}
 	
-	int i;
-	uviejo=matriz;
-	int j;
-	int k;
+	
+	uviejo2=matriz;
+	
+	
 	int t;
-	for(i=0;i<N;i++){
-		for(j=0;j<N;j++){
-			printf(" %f",uviejo[i][j] );
+	for(i=0;i<N2;i++){
+		for(j=0;j<N2;j++){
+			fprintf(tb," %f",uviejo2[i][j] );
 				}
-		printf(" \n");
+		fprintf(tb," \n");
 			}
 		
-	printf(" \n");
-	for(i=0;i<N;i++){
-		upresente[N-1,i]=uviejo[N-1,i];
-		upresente[0,i]=uviejo[0,i];
-		upresente[i,0]=uviejo[i,0];
-		upresente[i,N-1]=uviejo[i,N-1];
+	fprintf(tb," \n");
+	for(i=0;i<N2;i++){
+		upresente2[N2-1,i]=uviejo2[N2-1,i];
+		upresente2[0,i]=uviejo2[0,i];
+		upresente2[i,0]=uviejo2[i,0];
+		upresente2[i,N2-1]=uviejo2[i,N2-1];
 		//printf(" %f",upresente[0,i] );
 			}
-	for(i=1;i<N-1;i++){
-		for(j=1;j<N-1;j++){
-			upresente[i][j]=uviejo[i][j]+pow(r,2)*0.5*(uviejo[i+1][j]+uviejo[i][j+1]+uviejo[i-1][j]+uviejo[i][j-1]-4*uviejo[i][j]);
+	for(i=1;i<N2-1;i++){
+		for(j=1;j<N2-1;j++){
+			upresente2[i][j]=uviejo2[i][j]+pow(r2,2)*0.5*(uviejo2[i+1][j]+uviejo2[i][j+1]+uviejo2[i-1][j]+uviejo2[i][j-1]-4*uviejo2[i][j]);
 			//printf(" %f",upresente[i][j] );
 				}
 		//printf(" %f",upresente[N-1] );
 		}
-	for(i=0;i<N;i++){
-		for(j=0;j<N;j++){
-			printf(" %f",upresente[i][j] );
+	for(i=0;i<N2;i++){
+		for(j=0;j<N2;j++){
+			fprintf(tb," %f",upresente2[i][j] );
 				}
-		printf(" \n");
+		fprintf(tb," \n");
 			}
 
 	
 			
-	printf(" \n");
+	fprintf(tb," \n");
 
 
 
-	for(t=2;t<M;t++){
-		for(i=0;i<N;i++){
-			unuevo[N-1,i]=uviejo[N-1,i];
-			unuevo[0,i]=uviejo[0,i];
-			unuevo[i,0]=uviejo[i,0];
-			unuevo[i,N-1]=uviejo[i,N-1];
+	for(t=2;t<M2;t++){
+		for(i=0;i<N2;i++){
+			unuevo2[N2-1,i]=uviejo2[N2-1,i];
+			unuevo2[0,i]=uviejo2[0,i];
+			unuevo2[i,0]=uviejo2[i,0];
+			unuevo2[i,N2-1]=uviejo2[i,N2-1];
 				}
 		
 		//printf(" %f",unuevo[0] );
-		for(i=1;i<N-1;i++){
-			for(j=1;j<N-1;j++){
-				unuevo[i][j] = (2.0*(1.0-pow(r,2)))*upresente[i][j] - uviejo[i][j] + (pow(r,2)*(upresente[i+1][j]+upresente[i][j+1]+upresente[i][j-1] +  upresente[i-1][j]));
+		for(i=1;i<N2-1;i++){
+			for(j=1;j<N2-1;j++){
+				unuevo2[i][j] = (2.0*(1.0-pow(r2,2)))*upresente2[i][j] - uviejo2[i][j] + (pow(r2,2)*(upresente2[i+1][j]+upresente2[i][j+1]+upresente2[i][j-1] +  upresente2[i-1][j]));
 				//printf(" %f",unuevo[i] );
 					}
 			//printf(" %f",unuevo[N-1] );
 			//printf(" \n");
 				}
 
-		for(i=0;i<N;i++){
-			for(j=0;j<N;j++){
-				printf(" %f",unuevo[i][j] );
+		for(i=0;i<N2;i++){
+			for(j=0;j<N2;j++){
+				fprintf(tb," %f",unuevo2[i][j] );
 					}
-			printf(" \n");
+			fprintf(tb," \n");
 				}
-		printf(" \n");
-		for (k=1;k<N-1;k++){
-			for(j=1;j<N-1;j++){	
-				uviejo[k][j]=upresente[k][j];
-				upresente[k][j]=unuevo[k][j];
+		fprintf(tb," \n");
+		for (k=1;k<N2-1;k++){
+			for(j=1;j<N2-1;j++){	
+				uviejo2[k][j]=upresente2[k][j];
+				upresente2[k][j]=unuevo2[k][j];
 					}
 				}
 			}
 		
 	//printf(" \n");
 
-	
+	fclose(tb);
 
 }
 
